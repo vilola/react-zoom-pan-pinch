@@ -25,6 +25,7 @@ import {
   handleWheelStart,
   handleWheelZoom,
   handleWheelStop,
+  handleWheelPan,
 } from "./wheel/wheel.logic";
 import { isPanningAllowed, isPanningStartAllowed } from "./pan/panning.utils";
 import {
@@ -189,7 +190,11 @@ export class ZoomPanPinch {
     if (!keysPressed) return;
 
     handleWheelStart(this, event);
-    handleWheelZoom(this, event);
+    if (this.setup.wheel.mode === "pan") {
+      handleWheelPan(this, event);
+    } else {
+      handleWheelZoom(this, event);
+    }
     handleWheelStop(this, event);
   };
 

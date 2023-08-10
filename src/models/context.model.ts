@@ -75,6 +75,7 @@ export type ReactZoomPanPinchProps = {
     touchPadDisabled?: boolean;
     activationKeys?: string[];
     excluded?: string[];
+    mode?: "zoom" | "pan";
   };
   panning?: {
     disabled?: boolean;

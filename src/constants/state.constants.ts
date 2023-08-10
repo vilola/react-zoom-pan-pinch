@@ -28,6 +28,7 @@ export const initialSetup: LibrarySetup = {
     touchPadDisabled: false,
     activationKeys: [],
     excluded: [],
+    mode: "zoom",
   },
   panning: {
     disabled: false,
