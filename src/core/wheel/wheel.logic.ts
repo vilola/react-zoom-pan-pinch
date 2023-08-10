@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+import { getPaddingValue, handleNewPosition } from "../pan/panning.utils";
 import { ReactZoomPanPinchContext } from "../../models";
 import { handleCallback } from "../../utils/callback.utils";
 import { getContext } from "../../utils/context.utils";
@@ -12,8 +13,10 @@ import {
   getMousePosition,
 } from "./wheel.utils";
 import { handleAlignToScaleBounds } from "../zoom/zoom.logic";
-import { handleCalculateZoomPositions } from "../zoom/zoom.utils";
-import { getPaddingValue, handleNewPosition } from "react-zoom-pan-pinch/src/core/pan/panning.utils";
+import {
+  getWheelPanningClientPosition,
+  handleCalculateZoomPositions,
+} from "../zoom/zoom.utils";
 
 const wheelStopEventTime = 160;
 const wheelAnimationTime = 100;
@@ -34,22 +37,23 @@ export const handleWheelStart = (
 export function handleWheelPan(
   contextInstance: ReactZoomPanPinchContext,
   event: WheelEvent,
-  // clientX: number,
-  // clientY: number,
 ): void {
   const { startCoords, setup } = contextInstance;
   const { sizeX, sizeY } = setup.alignmentAnimation;
 
-  if (!startCoords) return;
-
-  // const { x, y } = getPanningClientPosition(contextInstance, clientX, clientY);
-  const paddingValueX = getPaddingValue(contextInstance, sizeX);
-  const paddingValueY = getPaddingValue(contextInstance, sizeY);
+  if (!startCoords || !contextInstance.bounds) return;
 
   const { deltaY, deltaX } = event;
 
-  // handleCalculateVelocity(contextInstance, { x, y });
-  handleNewPosition(contextInstance, deltaX, deltaY, paddingValueX, paddingValueY);
+  const { x, y } = getWheelPanningClientPosition(
+    contextInstance,
+    deltaX,
+    deltaY,
+  );
+  const paddingValueX = getPaddingValue(contextInstance, sizeX);
+  const paddingValueY = getPaddingValue(contextInstance, sizeY);
+
+  handleNewPosition(contextInstance, x, y, paddingValueX, paddingValueY);
 }
 
 export const handleWheelZoom = (

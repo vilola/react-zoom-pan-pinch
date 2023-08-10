@@ -5,6 +5,24 @@ import {
 } from "../../models";
 import { getMouseBoundedPosition } from "../bounds/bounds.utils";
 
+export const getWheelPanningClientPosition = (
+  contextInstance: ReactZoomPanPinchContext,
+  deltaX: number,
+  deltaY: number,
+): PositionType => {
+  const { transformState } = contextInstance;
+  const { panning } = contextInstance.setup;
+  const { lockAxisX, lockAxisY } = panning;
+  const { positionX, positionY } = transformState;
+
+  const mouseX = positionX - deltaX;
+  const mouseY = positionY - deltaY;
+  const newPositionX = lockAxisX ? positionX : mouseX;
+  const newPositionY = lockAxisY ? positionY : mouseY;
+
+  return { x: newPositionX, y: newPositionY };
+};
+
 export function handleCalculateZoomPositions(
   contextInstance: ReactZoomPanPinchContext,
   mouseX: number,

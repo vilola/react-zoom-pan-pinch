@@ -183,19 +183,26 @@ export class ZoomPanPinch {
     const { disabled } = this.setup;
     if (disabled) return;
 
-    const isAllowed = isWheelAllowed(this, event);
-    if (!isAllowed) return;
+    const isAllowed = {
+      wheel: isWheelAllowed(this, event),
+      pinch: isPanningStartAllowed(this, event),
+    };
+    if (isAllowed.wheel && !event.ctrlKey) {
+      const keysPressed = this.isPressingKeys(this.setup.wheel.activationKeys);
+      if (!keysPressed) return;
 
-    const keysPressed = this.isPressingKeys(this.setup.wheel.activationKeys);
-    if (!keysPressed) return;
-
-    handleWheelStart(this, event);
-    if (this.setup.wheel.mode === "pan") {
-      handleWheelPan(this, event);
-    } else {
+      handleWheelStart(this, event);
+      if (this.setup.wheel.mode === "pan") {
+        handleWheelPan(this, event);
+      } else {
+        handleWheelZoom(this, event);
+      }
+      handleWheelStop(this, event);
+    } else if (isAllowed.pinch && event.ctrlKey) {
+      handleWheelStart(this, event);
       handleWheelZoom(this, event);
+      handleWheelStop(this, event);
     }
-    handleWheelStop(this, event);
   };
 
   /// ///////

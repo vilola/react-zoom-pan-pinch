@@ -1,0 +1,53 @@
+import { Meta, Story, ArgsTable, Canvas } from "@storybook/addon-docs/blocks";
+import { action } from "@storybook/addon-actions";
+
+import { TransformWrapper, TransformComponent } from "../../../components";
+import { argsTypes } from "../../types/args.types.ts";
+import { normalizeArgs } from "../../utils";
+
+import exampleImg from "../../assets/big-image.jpeg";
+
+export const Template = (args) => (
+  <TransformWrapper {...normalizeArgs(args)}>
+    {(utils) => (
+      <div>
+        <Controls {...utils} />
+        <TransformComponent
+          wrapperStyle={{ maxWidth: "100%", maxHeight: "calc(100vh - 50px)" }}
+        >
+          <img src={exampleImg} alt="" />
+        </TransformComponent>
+      </div>
+    )}
+  </TransformWrapper>
+);
+
+<Meta
+  title="Examples/Pan with Wheel"
+  component={TransformWrapper}
+  argTypes={{
+    ...argsTypes,
+    limitToBounds: { ...argsTypes.limitToBounds, defaultValue: false },
+    "wheel.mode": {
+      ...argsTypes["wheel.mode"],
+      defaultValue: "pan",
+    },
+  }}
+/>
+
+# Pan with Wheel
+
+<br />
+
+### Preview:
+
+<Canvas>
+  <Story name="Pan with Wheel">{(args) => <Template {...args} />}</Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable
+  story="Pan with Wheel
+"
+/>
