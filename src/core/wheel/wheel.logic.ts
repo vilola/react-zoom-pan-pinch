@@ -38,8 +38,15 @@ export function handleWheelPan(
   contextInstance: ReactZoomPanPinchContext,
   event: WheelEvent,
 ): void {
-  const { startCoords, setup } = contextInstance;
+  const { contentComponent, startCoords, setup } = contextInstance;
   const { sizeX, sizeY } = setup.alignmentAnimation;
+
+  if (!contentComponent) {
+    throw new Error("Component not mounted");
+  }
+
+  event.preventDefault();
+  event.stopPropagation();
 
   if (!startCoords || !contextInstance.bounds) return;
 
